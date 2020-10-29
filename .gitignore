@@ -21,3 +21,21 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+CredentialAutorizationClient/build.xml
+
+CredentialAutorizationClient/build/classes/.netbeans_automatic_build
+
+CredentialAutorizationClient/build/classes/.netbeans_update_resources
+
+CredentialAutorizationClient/manifest.mf
+
+CredentialAutorizationClient/nbproject/build-impl.xml
+
+CredentialAutorizationClient/nbproject/genfiles.properties
+
+CredentialAutorizationClient/nbproject/private/private.properties
+
+CredentialAutorizationClient/nbproject/project.properties
+
+CredentialAutorizationClient/nbproject/project.xml
