@@ -244,7 +244,6 @@ public class CredentialAutorizationClient {
     }
     
     public static String getTagValue(String tagName, String xml) {
-        System.out.println("respuesta: " + tagName);
         return xml.split("<" + tagName + ">")[1].split("</" + tagName + ">")[0];
     }
 
