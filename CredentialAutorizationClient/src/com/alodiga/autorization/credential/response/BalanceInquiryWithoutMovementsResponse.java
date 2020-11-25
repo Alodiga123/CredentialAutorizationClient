@@ -6,6 +6,7 @@
 package com.alodiga.autorization.credential.response;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  *
@@ -26,7 +27,7 @@ public class BalanceInquiryWithoutMovementsResponse implements Serializable {
     private String SaldoEnDolares;
     private String PagoMinimo;
     private String FechaVencimientoUltimaLiquidacion;  
-   
+    
 
     public BalanceInquiryWithoutMovementsResponse() {
     }
@@ -163,6 +164,7 @@ public class BalanceInquiryWithoutMovementsResponse implements Serializable {
         return "BalanceInquiryWithoutMovementsResponse{" + "codigoError=" + codigoError + ", mensajeError=" + mensajeError + ", codigoRespuesta=" + codigoRespuesta + ", mensajeRespuesta=" + mensajeRespuesta + ", codigoAutorizacion=" + codigoAutorizacion + ", DisponibleConsumos=" + DisponibleConsumos + ", DisponibleCuotas=" + DisponibleCuotas + ", DisponibleAdelantos=" + DisponibleAdelantos + ", DisponiblePrestamos=" + DisponiblePrestamos + ", Saldo=" + Saldo + ", SaldoEnDolares=" + SaldoEnDolares + ", PagoMinimo=" + PagoMinimo + ", FechaVencimientoUltimaLiquidacion=" + FechaVencimientoUltimaLiquidacion + '}';
     }
 
-   
+    
+ 
    
 }

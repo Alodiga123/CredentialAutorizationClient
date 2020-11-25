@@ -51,7 +51,8 @@ import org.xml.sax.SAXException;
  */
 public class CredentialAutorizationClient {
 
-     private static final int CONNECTION_TIMEOUT = 5000;
+    private static final int CONNECTION_TIMEOUT = 5000;
+
     /**
      * @param args the command line arguments
      */
@@ -61,16 +62,17 @@ public class CredentialAutorizationClient {
         //LimitAdvanceResponse limitAdvanceResponse = new CredentialAutorizationClient().limitAdvance("20201029", "090950", "5496720000774011", "10","");
         CredentialAutorizationClient autorizationClient = new CredentialAutorizationClient();
         BalanceInquiryWithoutMovementsResponse balanceInquiryWithoutMovementsResponse = new BalanceInquiryWithoutMovementsResponse();
-        
+
         //balanceInquiryWithoutMovementsResponse = autorizationClient.balanceInquiryWithoutMovements("20201113", "120950", "52558525874460001", "202011041009501234");
         //System.out.println("consumos " + balanceInquiryWithoutMovementsResponse.getDisponibleConsumos());
         //autorizationClient.dispertionTransfer("20201113", "100950", "52558525874460001", "10", "202011041009501233");
         //autorizationClient.dispertionReverseTransfer("20201113", "100950", "202011041009501233", "52558525874460001", "1");
         //autorizationClient.limitAdvance("20201113", "120950", "52558525874460001", "10", "202011041009501233");
-        autorizationClient.limitAdvanceReverse("20201113", "120950", "202011041009501233", "52558525874460001", "1");
+        //autorizationClient.limitAdvanceReverse("20201113", "120950", "202011041009501233", "52558525874460001", "1");
+        autorizationClient.balanceInquiryWithMovements("20201124", "120950", "52558525874460001");
+
     }
-    
-    
+
     public DispertionResponse dispertionTransfer(String date, String hour, String numberCard, String balance, String sequence) throws SocketTimeoutException, ConnectException, MalformedURLException, IOException, Exception {
         String formattedSOAPResponse = "";
 
@@ -153,7 +155,7 @@ public class CredentialAutorizationClient {
         } catch (ConnectException ex) {
             ex.printStackTrace();
             throw new ConnectException();
-        }catch (MalformedURLException ex) {
+        } catch (MalformedURLException ex) {
             ex.printStackTrace();
             throw new MalformedURLException();
         } catch (IOException ex) {
@@ -164,8 +166,7 @@ public class CredentialAutorizationClient {
             throw new Exception();
         }
     }
-    
-    
+
     public LimitAdvanceResponse limitAdvance(String date, String hour, String numberCard, String balance, String sequence) throws SocketTimeoutException, ConnectException, MalformedURLException, IOException, Exception {
         String formattedSOAPResponse = "";
 
@@ -248,7 +249,7 @@ public class CredentialAutorizationClient {
         } catch (ConnectException ex) {
             ex.printStackTrace();
             throw new ConnectException();
-        }catch (MalformedURLException ex) {
+        } catch (MalformedURLException ex) {
             ex.printStackTrace();
             throw new MalformedURLException();
         } catch (IOException ex) {
@@ -259,8 +260,8 @@ public class CredentialAutorizationClient {
             throw new Exception();
         }
     }
-    
-    public BalanceInquiryWithoutMovementsResponse balanceInquiryWithoutMovements(String date, String hour, String numberCard, String sequence) throws SocketTimeoutException, ConnectException, MalformedURLException, IOException, Exception {
+
+    public BalanceInquiryWithoutMovementsResponse balanceInquiryWithoutMovements(String date, String hour, String aliasCard) throws SocketTimeoutException, ConnectException, MalformedURLException, IOException, Exception {
         String formattedSOAPResponse = "";
 
         try {
@@ -282,9 +283,8 @@ public class CredentialAutorizationClient {
             builder.append("<xsd:TipoTransaccion>" + Constants.NUMBER_TRANSACTION_TYPE_BALANCE_INQUIRY + "</xsd:TipoTransaccion>");
             builder.append("<xsd:FechaTransaccion>" + date + "</xsd:FechaTransaccion>");
             builder.append("<xsd:HoraTransaccion>" + hour + "</xsd:HoraTransaccion>");
-            builder.append("<xsd:SecuenciaTransaccion>" + sequence + "</xsd:SecuenciaTransaccion>");
             builder.append("<xsd:Terminal>" + Constants.IP_NUMBER_TEST + "</xsd:Terminal>");
-            builder.append("<xsd:Tarjeta>" + numberCard + "</xsd:Tarjeta>");
+            builder.append("<xsd:Tarjeta>" + aliasCard + "</xsd:Tarjeta>");
             builder.append("<xsd:SubTipoTransaccion>" + Constants.NUMBER_SUB_TRANSACTION_BALANCE_INQUIRY_WITHOUT_MOVEMENTS + "</xsd:SubTipoTransaccion>");
             builder.append("</xsd:Autorizar>");
             builder.append("</soapenv:Body>");
@@ -329,7 +329,7 @@ public class CredentialAutorizationClient {
                 balanceInquiryWithoutMovementsResponse.setDisponiblePrestamos(getTagValue("ns:DisponiblePrestamos", formattedSOAPResponse));
                 balanceInquiryWithoutMovementsResponse.setSaldo(getTagValue("ns:Saldo", formattedSOAPResponse));
                 balanceInquiryWithoutMovementsResponse.setSaldoEnDolares(getTagValue("ns:SaldoEnDolares", formattedSOAPResponse));
-                balanceInquiryWithoutMovementsResponse.setPagoMinimo(getTagValue("ns:PagoMinimo", formattedSOAPResponse));            
+                balanceInquiryWithoutMovementsResponse.setPagoMinimo(getTagValue("ns:PagoMinimo", formattedSOAPResponse));
             } catch (ArrayIndexOutOfBoundsException e) {
                 balanceInquiryWithoutMovementsResponse.setCodigoError(getTagValue("ns:CodigoError", formattedSOAPResponse));
                 balanceInquiryWithoutMovementsResponse.setMensajeError(getTagValue("ns:MensajeError", formattedSOAPResponse));
@@ -337,7 +337,7 @@ public class CredentialAutorizationClient {
                 balanceInquiryWithoutMovementsResponse.setMensajeRespuesta(getTagValue("ns:MensajeRespuesta", formattedSOAPResponse));
 
             }
-            return new BalanceInquiryWithoutMovementsResponse(balanceInquiryWithoutMovementsResponse.getCodigoError(), balanceInquiryWithoutMovementsResponse.getMensajeError(), balanceInquiryWithoutMovementsResponse.getCodigoRespuesta(), balanceInquiryWithoutMovementsResponse.getMensajeRespuesta(), balanceInquiryWithoutMovementsResponse.getCodigoAutorizacion(),balanceInquiryWithoutMovementsResponse.getDisponibleConsumos(),balanceInquiryWithoutMovementsResponse.getDisponibleCuotas(),balanceInquiryWithoutMovementsResponse.getDisponibleAdelantos(),balanceInquiryWithoutMovementsResponse.getDisponiblePrestamos(),balanceInquiryWithoutMovementsResponse.getSaldo(), balanceInquiryWithoutMovementsResponse.getSaldoEnDolares(),balanceInquiryWithoutMovementsResponse.getPagoMinimo());
+            return new BalanceInquiryWithoutMovementsResponse(balanceInquiryWithoutMovementsResponse.getCodigoError(), balanceInquiryWithoutMovementsResponse.getMensajeError(), balanceInquiryWithoutMovementsResponse.getCodigoRespuesta(), balanceInquiryWithoutMovementsResponse.getMensajeRespuesta(), balanceInquiryWithoutMovementsResponse.getCodigoAutorizacion(), balanceInquiryWithoutMovementsResponse.getDisponibleConsumos(), balanceInquiryWithoutMovementsResponse.getDisponibleCuotas(), balanceInquiryWithoutMovementsResponse.getDisponibleAdelantos(), balanceInquiryWithoutMovementsResponse.getDisponiblePrestamos(), balanceInquiryWithoutMovementsResponse.getSaldo(), balanceInquiryWithoutMovementsResponse.getSaldoEnDolares(), balanceInquiryWithoutMovementsResponse.getPagoMinimo());
 
         } catch (SocketTimeoutException e) {
             e.printStackTrace();
@@ -345,7 +345,7 @@ public class CredentialAutorizationClient {
         } catch (ConnectException ex) {
             ex.printStackTrace();
             throw new ConnectException();
-        }catch (MalformedURLException ex) {
+        } catch (MalformedURLException ex) {
             ex.printStackTrace();
             throw new MalformedURLException();
         } catch (IOException ex) {
@@ -356,8 +356,8 @@ public class CredentialAutorizationClient {
             throw new Exception();
         }
     }
-    
-    public DispertionResponse dispertionReverseTransfer(String date, String hour, String sequence,String numberCard, String balance) throws SocketTimeoutException, ConnectException, MalformedURLException, IOException, Exception {
+
+    public DispertionResponse dispertionReverseTransfer(String date, String hour, String sequence, String numberCard, String balance) throws SocketTimeoutException, ConnectException, MalformedURLException, IOException, Exception {
         String formattedSOAPResponse = "";
 
         try {
@@ -438,7 +438,7 @@ public class CredentialAutorizationClient {
         } catch (ConnectException ex) {
             ex.printStackTrace();
             throw new ConnectException();
-        }catch (MalformedURLException ex) {
+        } catch (MalformedURLException ex) {
             ex.printStackTrace();
             throw new MalformedURLException();
         } catch (IOException ex) {
@@ -449,8 +449,8 @@ public class CredentialAutorizationClient {
             throw new Exception();
         }
     }
-    
-    public LimitAdvanceResponse limitAdvanceReverse(String date, String hour, String sequence,String numberCard, String balance) throws SocketTimeoutException, ConnectException, MalformedURLException, IOException, Exception {
+
+    public LimitAdvanceResponse limitAdvanceReverse(String date, String hour, String sequence, String numberCard, String balance) throws SocketTimeoutException, ConnectException, MalformedURLException, IOException, Exception {
         String formattedSOAPResponse = "";
 
         try {
@@ -531,7 +531,7 @@ public class CredentialAutorizationClient {
         } catch (ConnectException ex) {
             ex.printStackTrace();
             throw new ConnectException();
-        }catch (MalformedURLException ex) {
+        } catch (MalformedURLException ex) {
             ex.printStackTrace();
             throw new MalformedURLException();
         } catch (IOException ex) {
@@ -542,8 +542,8 @@ public class CredentialAutorizationClient {
             throw new Exception();
         }
     }
-    
-    public BalanceInquiryWithMovementsResponse balanceInquiryWithMovements(String date, String hour, String numberCard, String sequence) throws SocketTimeoutException, ConnectException, MalformedURLException, IOException, Exception {
+
+    public BalanceInquiryWithMovementsResponse balanceInquiryWithMovements(String date, String hour, String aliasCard) throws SocketTimeoutException, ConnectException, MalformedURLException, IOException, Exception {
         String formattedSOAPResponse = "";
 
         try {
@@ -564,10 +564,9 @@ public class CredentialAutorizationClient {
             builder.append("<xsd:Canal>" + Constants.CANAL + "</xsd:Canal>");
             builder.append("<xsd:TipoTransaccion>" + Constants.NUMBER_TRANSACTION_TYPE_BALANCE_INQUIRY + "</xsd:TipoTransaccion>");
             builder.append("<xsd:FechaTransaccion>" + date + "</xsd:FechaTransaccion>");
-            builder.append("<xsd:HoraTransaccion>" + hour + "</xsd:HoraTransaccion>");
-            builder.append("<xsd:SecuenciaTransaccion>" + sequence + "</xsd:SecuenciaTransaccion>");
+            builder.append("<xsd:HoraTransaccion>" + hour + "</xsd:HoraTransaccion>");            
             builder.append("<xsd:Terminal>" + Constants.IP_NUMBER_TEST + "</xsd:Terminal>");
-            builder.append("<xsd:Tarjeta>" + numberCard + "</xsd:Tarjeta>");
+            builder.append("<xsd:Tarjeta>" + aliasCard + "</xsd:Tarjeta>");
             builder.append("<xsd:SubTipoTransaccion>" + Constants.NUMBER_SUB_TRANSACTION_BALANCE_INQUIRY_WITH_MOVEMENTS + "</xsd:SubTipoTransaccion>");
             builder.append("</xsd:Autorizar>");
             builder.append("</soapenv:Body>");
@@ -599,31 +598,27 @@ public class CredentialAutorizationClient {
             }
             formattedSOAPResponse = formatXML(outputString);
             System.out.println(outputString);
-            BalanceInquiryWithoutMovementsResponse balanceInquiryWithoutMovementsResponse = new BalanceInquiryWithoutMovementsResponse();
+            BalanceInquiryWithMovementsResponse balanceInquiryWithMovementsResponse = new BalanceInquiryWithMovementsResponse();
             try {
-                balanceInquiryWithoutMovementsResponse.setCodigoError(getTagValue("ns:CodigoError", formattedSOAPResponse));
-                balanceInquiryWithoutMovementsResponse.setMensajeError(getTagValue("ns:MensajeError", formattedSOAPResponse));
-                balanceInquiryWithoutMovementsResponse.setCodigoRespuesta(getTagValue("ns:CodigoRespuesta", formattedSOAPResponse));
-                balanceInquiryWithoutMovementsResponse.setMensajeRespuesta(getTagValue("ns:MensajeRespuesta", formattedSOAPResponse));
-                balanceInquiryWithoutMovementsResponse.setCodigoAutorizacion(getTagValue("ns:CodigoAutorizacion", formattedSOAPResponse));
-                balanceInquiryWithoutMovementsResponse.setDisponibleConsumos(getTagValue("ns:DisponibleConsumos", formattedSOAPResponse));
-                balanceInquiryWithoutMovementsResponse.setDisponibleCuotas(getTagValue("ns:DisponibleCuotas", formattedSOAPResponse));
-                balanceInquiryWithoutMovementsResponse.setDisponibleAdelantos(getTagValue("ns:DisponibleAdelantos", formattedSOAPResponse));
-                balanceInquiryWithoutMovementsResponse.setDisponiblePrestamos(getTagValue("ns:DisponiblePrestamos", formattedSOAPResponse));
-                balanceInquiryWithoutMovementsResponse.setSaldo(getTagValue("ns:Saldo", formattedSOAPResponse));
-                balanceInquiryWithoutMovementsResponse.setSaldoEnDolares(getTagValue("ns:SaldoEnDolares", formattedSOAPResponse));
-                balanceInquiryWithoutMovementsResponse.setPagoMinimo(getTagValue("ns:PagoMinimo", formattedSOAPResponse));            
-                List<Movimiento> movimientos = new ArrayList<Movimiento>();
-                for (Movimiento movimiento : movimientos) {
-                    
-                }
-                 
-            
+                balanceInquiryWithMovementsResponse.setCodigoError(getTagValue("ns:CodigoError", formattedSOAPResponse));
+                balanceInquiryWithMovementsResponse.setMensajeError(getTagValue("ns:MensajeError", formattedSOAPResponse));
+                balanceInquiryWithMovementsResponse.setCodigoRespuesta(getTagValue("ns:CodigoRespuesta", formattedSOAPResponse));
+                balanceInquiryWithMovementsResponse.setMensajeRespuesta(getTagValue("ns:MensajeRespuesta", formattedSOAPResponse));
+                balanceInquiryWithMovementsResponse.setCodigoAutorizacion(getTagValue("ns:CodigoAutorizacion", formattedSOAPResponse));
+                balanceInquiryWithMovementsResponse.setDisponibleConsumos(getTagValue("ns:DisponibleConsumos", formattedSOAPResponse));
+                balanceInquiryWithMovementsResponse.setDisponibleCuotas(getTagValue("ns:DisponibleCuotas", formattedSOAPResponse));
+                balanceInquiryWithMovementsResponse.setDisponibleAdelantos(getTagValue("ns:DisponibleAdelantos", formattedSOAPResponse));
+                balanceInquiryWithMovementsResponse.setDisponiblePrestamos(getTagValue("ns:DisponiblePrestamos", formattedSOAPResponse));
+                balanceInquiryWithMovementsResponse.setSaldo(getTagValue("ns:Saldo", formattedSOAPResponse));
+                balanceInquiryWithMovementsResponse.setSaldoEnDolares(getTagValue("ns:SaldoEnDolares", formattedSOAPResponse));
+                balanceInquiryWithMovementsResponse.setPagoMinimo(getTagValue("ns:PagoMinimo", formattedSOAPResponse));
+                balanceInquiryWithMovementsResponse.setMovimientos(getListFromTag(getListByTag(formattedSOAPResponse, "Movimientos")));
+
             } catch (ArrayIndexOutOfBoundsException e) {
-                balanceInquiryWithoutMovementsResponse.setCodigoError(getTagValue("ns:CodigoError", formattedSOAPResponse));
-                balanceInquiryWithoutMovementsResponse.setMensajeError(getTagValue("ns:MensajeError", formattedSOAPResponse));
-                balanceInquiryWithoutMovementsResponse.setCodigoRespuesta(getTagValue("ns:CodigoRespuesta", formattedSOAPResponse));
-                balanceInquiryWithoutMovementsResponse.setMensajeRespuesta(getTagValue("ns:MensajeRespuesta", formattedSOAPResponse));
+                balanceInquiryWithMovementsResponse.setCodigoError(getTagValue("ns:CodigoError", formattedSOAPResponse));
+                balanceInquiryWithMovementsResponse.setMensajeError(getTagValue("ns:MensajeError", formattedSOAPResponse));
+                balanceInquiryWithMovementsResponse.setCodigoRespuesta(getTagValue("ns:CodigoRespuesta", formattedSOAPResponse));
+                balanceInquiryWithMovementsResponse.setMensajeRespuesta(getTagValue("ns:MensajeRespuesta", formattedSOAPResponse));
 
             }
             return null;
@@ -635,7 +630,7 @@ public class CredentialAutorizationClient {
         } catch (ConnectException ex) {
             ex.printStackTrace();
             throw new ConnectException();
-        }catch (MalformedURLException ex) {
+        } catch (MalformedURLException ex) {
             ex.printStackTrace();
             throw new MalformedURLException();
         } catch (IOException ex) {
@@ -646,9 +641,8 @@ public class CredentialAutorizationClient {
             throw new Exception();
         }
     }
-    
-    
-    public static String getTagValue(String tagName, String xml) {  
+
+    public static String getTagValue(String tagName, String xml) {
         return xml.split("<" + tagName + ">")[1].split("</" + tagName + ">")[0];
     }
 
@@ -715,4 +709,31 @@ public class CredentialAutorizationClient {
         }
     }
     
+     public static String getListByTag(String xml, String tag) {
+        String value = xml.split(tag + ">")[1]+"f";
+        String returned = value.split("</ns:f")[0];
+        return value;
+    }
+     
+    
+     public static List<Movimiento> getListFromTag(String nameElement) {
+         List<Movimiento> movimientos = new ArrayList<>();
+         int large = (nameElement.split("</ns:Movimiento>").length)-1;
+         for(int i=0;i<=large-1;i++){
+             //System.out.println(nameElement.split("</ns:Movimiento>")[i]);
+             Movimiento movimiento = new Movimiento();   
+             movimiento.setHora(getElementByTag(nameElement.split("</ns:Movimiento>")[i], "Hora"));
+             movimiento.setFecha(getElementByTag(nameElement.split("</ns:Movimiento>")[i], "Fecha"));
+             movimiento.setComercio(getElementByTag(nameElement.split("</ns:Movimiento>")[i], "Comercio"));
+             movimientos.add(movimiento);
+         }
+         //System.out.println("movimientos"+ movimientos.size());
+        return movimientos;
+    }
+     
+     public static String getElementByTag(String xml, String tag) {
+        String value = xml.split(tag + ">")[1].split("</ns:")[0];
+        return value;
+    }
+
 }

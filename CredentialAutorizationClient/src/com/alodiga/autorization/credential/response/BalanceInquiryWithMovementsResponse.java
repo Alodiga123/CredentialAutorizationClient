@@ -6,7 +6,8 @@
 package com.alodiga.autorization.credential.response;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  *
@@ -27,7 +28,7 @@ public class BalanceInquiryWithMovementsResponse implements Serializable {
     private String SaldoEnDolares;
     private String PagoMinimo;
     private String FechaVencimientoUltimaLiquidacion;
-    private ArrayList<Movimientos> movimientos;
+    private List<Movimiento> movimientos;
    
 
     public BalanceInquiryWithMovementsResponse() {
@@ -40,7 +41,7 @@ public class BalanceInquiryWithMovementsResponse implements Serializable {
         this.mensajeRespuesta = mensajeRespuesta;
     }
 
-    public BalanceInquiryWithMovementsResponse(String codigoError, String mensajeError, String codigoRespuesta, String mensajeRespuesta, String codigoAutorizacion, String DisponibleConsumos, String DisponibleCuotas, String DisponibleAdelantos, String DisponiblePrestamos, String Saldo, String SaldoEnDolares, String PagoMinimo, String FechaVencimientoUltimaLiquidacion, ArrayList<Movimientos> movimientos) {
+    public BalanceInquiryWithMovementsResponse(String codigoError, String mensajeError, String codigoRespuesta, String mensajeRespuesta, String codigoAutorizacion, String DisponibleConsumos, String DisponibleCuotas, String DisponibleAdelantos, String DisponiblePrestamos, String Saldo, String SaldoEnDolares, String PagoMinimo, String FechaVencimientoUltimaLiquidacion, List<Movimiento> movimientos) {
         this.codigoError = codigoError;
         this.mensajeError = mensajeError;
         this.codigoRespuesta = codigoRespuesta;
@@ -163,11 +164,11 @@ public class BalanceInquiryWithMovementsResponse implements Serializable {
         this.FechaVencimientoUltimaLiquidacion = FechaVencimientoUltimaLiquidacion;
     }
 
-    public ArrayList<Movimientos> getMovimientos() {
+    public List<Movimiento> getMovimientos() {
         return movimientos;
     }
 
-    public void setMovimientos(ArrayList<Movimientos> movimientos) {
+    public void setMovimientos(List<Movimiento> movimientos) {
         this.movimientos = movimientos;
     }
 
